@@ -18,6 +18,7 @@
 // -----------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -72,6 +73,40 @@ namespace Consul.Test
 
             Assert.IsType<CoordinateEntry[]>(nodeDetails);
             Assert.NotEmpty(nodeDetails);
+        }
+
+        [Fact]
+        public async Task Coordinate_Update()
+        {
+            var info = await _client.Agent.Self();
+            var node = "foob";
+            var registerNode = await _client.Catalog.Register(new CatalogRegistration()
+            {
+                Node = node,
+                Address = "1.1.1.1"
+            }, default);
+
+            Assert.NotNull(registerNode);
+            
+            var newCoordinate = new SerfCoordinate
+            {
+                Vec = new List<double> { 1.0, 2.0, 3.0 },
+                Adjustment = 0.2,
+                Error = 0.5,
+                Height = 0.5,
+                
+                
+            };
+
+            var entry = new CoordinateEntry
+            {
+                Node = node,
+                Coord = newCoordinate
+            };
+
+            var writeOptions = new WriteOptions();
+            var updateResult = await _client.Coordinate.Update(entry, null);
+            Assert.NotNull(updateResult);
         }
     }
 }

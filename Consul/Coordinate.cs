@@ -105,7 +105,20 @@ namespace Consul
         {
             return Node(node, QueryOptions.Default, ct);
         }
+
+        /// <summary>
+        /// Update inserts or updates the LAN coordinate of a node.
+        /// </summary>
+        /// <param name="node">The node to update</param>
+        /// <param name="ct">The cancellation token</param>
+        /// <param name="q">Customized query options</param>
+        /// <returns>This endpoint updates the LAN network coordinates for a node in a given datacenter.</returns>
+        public Task<WriteResult> Update(CoordinateEntry node, WriteOptions q, CancellationToken ct = default)
+        {
+            return _client.Put(string.Format("/v1/coordinate/update"), node, q).Execute(ct);
+        }
     }
+    
 
     public partial class ConsulClient : IConsulClient
     {
