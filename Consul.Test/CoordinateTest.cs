@@ -91,16 +91,16 @@ namespace Consul.Test
             var newCoordinate = new SerfCoordinate
             {
                 Vec = new List<double> { 1.0, 2.0, 3.0 },
-                Adjustment = 0.2,
                 Error = 0.5,
+                Adjustment = 0.2,
                 Height = 0.5,
-                
-                
+ 
             };
 
             var entry = new CoordinateEntry
             {
                 Node = node,
+                Segment = "",
                 Coord = newCoordinate
             };
 
